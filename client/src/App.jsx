@@ -8,7 +8,8 @@ function App() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sort, setSort] = useState("");
-  const [cartCount, setCartCount] = useState(0);
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
 
   const categories = useMemo(() => ["All", "Electronics", "Fashion", "Home"], []);
 
@@ -35,23 +36,28 @@ function App() {
     fetchProducts();
   };
 
-  const clearFilters = () => {
+  const clearFilters = async () => {
     setSearchQuery("");
     setCategory("All");
     setMinPrice("");
     setMaxPrice("");
     setSort("");
-    setTimeout(() => {
-      const response = fetch("http://localhost:3001/api/products")
-        .then((res) => res.json())
-        .then((data) => setProducts(data));
-      return response;
-    }, 0);
+
+    const response = await fetch("http://localhost:3001/api/products");
+    const data = await response.json();
+    setProducts(data);
   };
 
-  const addToCart = () => {
-    setCartCount((prev) => prev + 1);
+  const addToCart = (product) => {
+    setCart((prev) => [...prev, product]);
+    setShowCart(true);
   };
+
+  const removeFromCart = (indexToRemove) => {
+    setCart((prev) => prev.filter((_, index) => index !== indexToRemove));
+  };
+
+  const cartTotal = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="page">
@@ -77,14 +83,20 @@ function App() {
               <span className="small-text">Hello, Maurice</span>
               <span className="bold-text">Account</span>
             </div>
+
             <div className="topbar-link">
               <span className="small-text">Returns</span>
               <span className="bold-text">& Orders</span>
             </div>
-            <div className="cart-box">
+
+            <button
+              type="button"
+              className="cart-box"
+              onClick={() => setShowCart((prev) => !prev)}
+            >
               <span className="cart-icon">🛒</span>
-              <span className="cart-count">{cartCount}</span>
-            </div>
+              <span className="cart-count">{cart.length}</span>
+            </button>
           </div>
         </div>
       </header>
@@ -184,7 +196,7 @@ function App() {
                 <p className="rating-text">⭐⭐⭐⭐☆ {product.rating}</p>
                 <p className="price-text">${product.price.toFixed(2)}</p>
 
-                <button className="cart-btn" onClick={addToCart}>
+                <button className="cart-btn" onClick={() => addToCart(product)}>
                   Add to Cart
                 </button>
               </div>
@@ -192,6 +204,54 @@ function App() {
           ))}
         </section>
       </main>
+
+      {showCart && (
+        <>
+          <div className="cart-overlay" onClick={() => setShowCart(false)}></div>
+
+          <aside className="cart-drawer">
+            <div className="cart-drawer-header">
+              <h2>Shopping Cart</h2>
+              <button
+                type="button"
+                className="close-cart-btn"
+                onClick={() => setShowCart(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            {cart.length === 0 ? (
+              <p className="empty-cart">Your cart is empty.</p>
+            ) : (
+              <>
+                <div className="cart-list">
+                  {cart.map((item, index) => (
+                    <div className="cart-item" key={`${item.id}-${index}`}>
+                      <div className="cart-item-info">
+                        <h4>{item.name}</h4>
+                        <p>${item.price.toFixed(2)}</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="remove-btn"
+                        onClick={() => removeFromCart(index)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="cart-total">
+                  <h3>Total: ${cartTotal.toFixed(2)}</h3>
+                </div>
+              </>
+            )}
+          </aside>
+        </>
+      )}
     </div>
   );
 }
