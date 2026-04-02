@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 const PORT = 3001;
@@ -12,7 +13,7 @@ const products = [
     id: 1,
     name: "Wireless Headphones",
     category: "Electronics",
-    price: 89.99,
+    price: 99.99,
     rating: 4.5,
     image: "https://via.placeholder.com/200?text=Headphones"
   },
@@ -28,76 +29,82 @@ const products = [
     id: 3,
     name: "Coffee Maker",
     category: "Home",
-    price: 39.99,
+    price: 79.99,
     rating: 4.0,
     image: "https://via.placeholder.com/200?text=Coffee+Maker"
   },
   {
     id: 4,
-    name: "Backpack",
-    category: "Fashion",
-    price: 49.99,
-    rating: 4.4,
-    image: "https://via.placeholder.com/200?text=Backpack"
+    name: "Smartphone",
+    category: "Electronics",
+    price: 699.99,
+    rating: 4.7,
+    image: "https://via.placeholder.com/200?text=Smartphone"
   },
   {
     id: 5,
-    name: "Smart Watch",
-    category: "Electronics",
-    price: 129.99,
-    rating: 4.6,
-    image: "https://via.placeholder.com/200?text=Smart+Watch"
+    name: "Jacket",
+    category: "Fashion",
+    price: 89.99,
+    rating: 4.3,
+    image: "https://via.placeholder.com/200?text=Jacket"
   },
   {
     id: 6,
-    name: "Desk Lamp",
+    name: "Blender",
     category: "Home",
-    price: 24.99,
+    price: 49.99,
     rating: 4.1,
-    image: "https://via.placeholder.com/200?text=Desk+Lamp"
+    image: "https://via.placeholder.com/200?text=Blender"
   }
 ];
 
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Server is working!" });
+});
+
 app.get("/api/products", (req, res) => {
-  let filteredProducts = [...products];
+  let filtered = [...products];
 
   const { q, category, min_price, max_price, sort } = req.query;
 
   if (q) {
-    filteredProducts = filteredProducts.filter(product =>
-      product.name.toLowerCase().includes(q.toLowerCase())
+    filtered = filtered.filter((p) =>
+      p.name.toLowerCase().includes(q.toLowerCase())
     );
   }
 
   if (category && category !== "All") {
-    filteredProducts = filteredProducts.filter(
-      product => product.category === category
-    );
+    filtered = filtered.filter((p) => p.category === category);
   }
 
   if (min_price) {
-    filteredProducts = filteredProducts.filter(
-      product => product.price >= Number(min_price)
-    );
+    filtered = filtered.filter((p) => p.price >= Number(min_price));
   }
 
   if (max_price) {
-    filteredProducts = filteredProducts.filter(
-      product => product.price <= Number(max_price)
-    );
+    filtered = filtered.filter((p) => p.price <= Number(max_price));
   }
 
   if (sort === "price_asc") {
-    filteredProducts.sort((a, b) => a.price - b.price);
+    filtered.sort((a, b) => a.price - b.price);
   } else if (sort === "price_desc") {
-    filteredProducts.sort((a, b) => b.price - a.price);
+    filtered.sort((a, b) => b.price - a.price);
   } else if (sort === "name_asc") {
-    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+    filtered.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  res.json(filteredProducts);
+  res.json(filtered);
+});
+
+// Serve built frontend
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// Fallback for frontend routes
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 app.listen(PORT, () => {
-  console.log(`Mock Amazon API running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
