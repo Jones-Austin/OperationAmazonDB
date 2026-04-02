@@ -22,7 +22,10 @@ function App() {
     if (maxPrice) params.append("max_price", maxPrice);
     if (sort) params.append("sort", sort);
 
-    const response = await fetch(`http://localhost:3001/api/products?${params.toString()}`);
+    const queryString = params.toString();
+    const url = queryString ? `/api/products?${queryString}` : "/api/products";
+
+    const response = await fetch(url);
     const data = await response.json();
     setProducts(data);
   };
@@ -43,7 +46,7 @@ function App() {
     setMaxPrice("");
     setSort("");
 
-    const response = await fetch("http://localhost:3001/api/products");
+    const response = await fetch("/api/products");
     const data = await response.json();
     setProducts(data);
   };
