@@ -15,7 +15,7 @@ const products = [
     category: "Electronics",
     price: 99.99,
     rating: 4.5,
-    image: "https://via.placeholder.com/200?text=Headphones"
+    image: "https://placehold.co/200x200?text=Headphones"
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const products = [
     category: "Fashion",
     price: 59.99,
     rating: 4.2,
-    image: "https://via.placeholder.com/200?text=Shoes"
+    image: "https://placehold.co/200x200?text=Shoes"
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ const products = [
     category: "Home",
     price: 79.99,
     rating: 4.0,
-    image: "https://via.placeholder.com/200?text=Coffee+Maker"
+    image: "https://placehold.co/200x200?text=Coffee+Maker"
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const products = [
     category: "Electronics",
     price: 699.99,
     rating: 4.7,
-    image: "https://via.placeholder.com/200?text=Smartphone"
+    image: "https://placehold.co/200x200?text=Smartphone"
   },
   {
     id: 5,
@@ -47,7 +47,7 @@ const products = [
     category: "Fashion",
     price: 89.99,
     rating: 4.3,
-    image: "https://via.placeholder.com/200?text=Jacket"
+    image: "https://placehold.co/200x200?text=Jacket"
   },
   {
     id: 6,
@@ -55,7 +55,7 @@ const products = [
     category: "Home",
     price: 49.99,
     rating: 4.1,
-    image: "https://via.placeholder.com/200?text=Blender"
+    image: "https://placehold.co/200x200?text=Blender"
   }
 ];
 
@@ -97,10 +97,8 @@ app.get("/api/products", (req, res) => {
   res.json(filtered);
 });
 
-// Serve built frontend
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// Fallback for frontend routes
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
