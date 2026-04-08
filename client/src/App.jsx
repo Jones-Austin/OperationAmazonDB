@@ -3,6 +3,8 @@ import "./App.css";
 
 function App() {
   const [products, setProducts] = useState([]);
+  const [analytics, setAnalytics] = useState([]);
+  const [analyticsSummary, setAnalyticsSummary] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [minPrice, setMinPrice] = useState("");
@@ -10,6 +12,8 @@ function App() {
   const [sort, setSort] = useState("");
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
+
+  const API_BASE = "http://localhost:3001";
 
   const categories = useMemo(() => ["All", "Electronics", "Fashion", "Home"], []);
 
@@ -23,15 +27,25 @@ function App() {
     if (sort) params.append("sort", sort);
 
     const queryString = params.toString();
-    const url = queryString ? `/api/products?${queryString}` : "/api/products";
+    const url = queryString
+      ? `${API_BASE}/api/products?${queryString}`
+      : `${API_BASE}/api/products`;
 
     const response = await fetch(url);
     const data = await response.json();
     setProducts(data);
   };
 
+  const fetchAnalytics = async () => {
+    const response = await fetch(`${API_BASE}/api/analytics/products`);
+    const data = await response.json();
+    setAnalytics(data.analytics || []);
+    setAnalyticsSummary(data.summary || null);
+  };
+
   useEffect(() => {
     fetchProducts();
+    fetchAnalytics();
   }, []);
 
   const handleApplyFilters = (e) => {
@@ -46,7 +60,7 @@ function App() {
     setMaxPrice("");
     setSort("");
 
-    const response = await fetch("/api/products");
+    const response = await fetch(`${API_BASE}/api/products`);
     const data = await response.json();
     setProducts(data);
   };
@@ -205,6 +219,59 @@ function App() {
               </div>
             </article>
           ))}
+        </section>
+
+        <section className="analytics-panel">
+          <div className="analytics-header">
+            <h2>Business Analytics</h2>
+            <p>Top-selling products and estimated revenue based on generated order data.</p>
+          </div>
+
+          {analyticsSummary && (
+            <div className="analytics-summary">
+              <div className="summary-card">
+                <span className="summary-label">Products Analyzed</span>
+                <span className="summary-value">{analyticsSummary.totalProducts}</span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-label">Units Sold</span>
+                <span className="summary-value">{analyticsSummary.totalUnitsSold}</span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-label">Total Revenue</span>
+                <span className="summary-value">
+                  ${analyticsSummary.totalRevenue.toFixed(2)}
+                </span>
+              </div>
+              <div className="summary-card">
+                <span className="summary-label">Top Product</span>
+                <span className="summary-value">{analyticsSummary.topProduct}</span>
+              </div>
+            </div>
+          )}
+
+          <div className="analytics-table-wrap">
+            <table className="analytics-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Total Sold</th>
+                  <th>Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                {analytics.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.product}</td>
+                    <td>{item.category}</td>
+                    <td>{item.totalSold}</td>
+                    <td>${item.revenue.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       </main>
 
