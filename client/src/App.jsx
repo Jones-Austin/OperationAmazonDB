@@ -1,7 +1,71 @@
 import { useEffect, useMemo, useState } from "react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import "./App.css";
 
+function StatsPage({ analytics, summary }) {
+  return (
+    <section className="analytics-panel">
+      <div className="analytics-header">
+        <h2>Business Analytics Dashboard</h2>
+        <p>Top-selling products and estimated revenue.</p>
+      </div>
+
+      {summary && (
+        <div className="analytics-summary">
+          <div className="summary-card">
+            <span className="summary-label">Products Analyzed</span>
+            <span className="summary-value">{summary.totalProducts}</span>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Units Sold</span>
+            <span className="summary-value">{summary.totalUnitsSold}</span>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Total Revenue</span>
+            <span className="summary-value">${summary.totalRevenue.toFixed(2)}</span>
+          </div>
+          <div className="summary-card">
+            <span className="summary-label">Top Product</span>
+            <span className="summary-value">{summary.topProduct}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="charts-container">
+        <div className="chart-wrapper">
+          <h3>Product Popularity (Units Sold)</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={analytics}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="product" tick={{fontSize: 12}} interval={0} angle={-25} textAnchor="end" height={80}/>
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="totalSold" fill="#8884d8" name="Units Sold" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-wrapper">
+          <h3>Revenue by Product ($)</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={analytics}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="product" tick={{fontSize: 12}} interval={0} angle={-25} textAnchor="end" height={80}/>
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="revenue" fill="#82ca9d" name="Revenue ($)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function App() {
+  const [currentView, setCurrentView] = useState("shop");
   const [products, setProducts] = useState([]);
   const [analytics, setAnalytics] = useState([]);
   const [analyticsSummary, setAnalyticsSummary] = useState(null);
@@ -101,9 +165,14 @@ function App() {
               <span className="bold-text">Account</span>
             </div>
 
-            <div className="topbar-link">
+            <div className="topbar-link" onClick={() => setCurrentView("shop")} style={{ cursor: "pointer" }}>
               <span className="small-text">Returns</span>
               <span className="bold-text">& Orders</span>
+            </div>
+
+            <div className="topbar-link" onClick={() => setCurrentView("stats")} style={{ cursor: "pointer" }}>
+              <span className="small-text">Business</span>
+              <span className="bold-text">Dashboard</span>
             </div>
 
             <button
@@ -129,7 +198,9 @@ function App() {
       </div>
 
       <main className="main-content">
-        <section className="hero">
+        {currentView === "shop" ? (
+          <>
+            <section className="hero">
           <div className="hero-overlay">
             <h1>Shop smart with MockupAmazon</h1>
             <p>Browse products, filter results, and simulate a real e-commerce experience.</p>
@@ -221,58 +292,10 @@ function App() {
           ))}
         </section>
 
-        <section className="analytics-panel">
-          <div className="analytics-header">
-            <h2>Business Analytics</h2>
-            <p>Top-selling products and estimated revenue based on generated order data.</p>
-          </div>
-
-          {analyticsSummary && (
-            <div className="analytics-summary">
-              <div className="summary-card">
-                <span className="summary-label">Products Analyzed</span>
-                <span className="summary-value">{analyticsSummary.totalProducts}</span>
-              </div>
-              <div className="summary-card">
-                <span className="summary-label">Units Sold</span>
-                <span className="summary-value">{analyticsSummary.totalUnitsSold}</span>
-              </div>
-              <div className="summary-card">
-                <span className="summary-label">Total Revenue</span>
-                <span className="summary-value">
-                  ${analyticsSummary.totalRevenue.toFixed(2)}
-                </span>
-              </div>
-              <div className="summary-card">
-                <span className="summary-label">Top Product</span>
-                <span className="summary-value">{analyticsSummary.topProduct}</span>
-              </div>
-            </div>
-          )}
-
-          <div className="analytics-table-wrap">
-            <table className="analytics-table">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Total Sold</th>
-                  <th>Revenue</th>
-                </tr>
-              </thead>
-              <tbody>
-                {analytics.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.product}</td>
-                    <td>{item.category}</td>
-                    <td>{item.totalSold}</td>
-                    <td>${item.revenue.toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+          </>
+        ) : (
+          <StatsPage analytics={analytics} summary={analyticsSummary} />
+        )}
       </main>
 
       {showCart && (
