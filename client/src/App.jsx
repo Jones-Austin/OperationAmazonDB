@@ -12,6 +12,7 @@ function App() {
   const [sort, setSort] = useState("");
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [cartMessage, setCartMessage] = useState("");
 
   const API_BASE = "http://localhost:3001";
 
@@ -68,6 +69,11 @@ function App() {
   const addToCart = (product) => {
     setCart((prev) => [...prev, product]);
     setShowCart(true);
+    setCartMessage(`${product.name} added to cart`);
+
+    setTimeout(() => {
+      setCartMessage("");
+    }, 2500);
   };
 
   const removeFromCart = (indexToRemove) => {
@@ -97,7 +103,7 @@ function App() {
 
           <div className="topbar-actions">
             <div className="topbar-link">
-              <span className="small-text">Hello, Maurice</span>
+              <span className="small-text">Hello, Guest</span>
               <span className="bold-text">Account</span>
             </div>
 
@@ -127,6 +133,8 @@ function App() {
           <span>Home</span>
         </div>
       </div>
+
+      {cartMessage && <div className="cart-message">{cartMessage}</div>}
 
       <main className="main-content">
         <section className="hero">
@@ -203,27 +211,34 @@ function App() {
           <p>{products.length} product(s) found</p>
         </section>
 
-        <section className="product-grid">
-          {products.map((product) => (
-            <article className="product-card" key={product.id}>
-              <div className="product-image-wrap">
-                <img src={product.image} alt={product.name} />
-              </div>
+        {products.length === 0 ? (
+          <section className="empty-results">
+            <h3>No products found</h3>
+            <p>Try changing your search, category, or price filters.</p>
+          </section>
+        ) : (
+          <section className="product-grid">
+            {products.map((product) => (
+              <article className="product-card" key={product.id}>
+                <div className="product-image-wrap">
+                  <img src={product.image} alt={product.name} />
+                </div>
 
-              <div className="product-info">
-                <h3>{product.name}</h3>
-                <p className="category-text">{product.category}</p>
-                <p className="rating-text">⭐⭐⭐⭐☆ {product.rating}</p>
-                <p className="description-text">{product.description}</p>
-                <p className="price-text">${product.price.toFixed(2)}</p>
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <p className="category-text">{product.category}</p>
+                  <p className="rating-text">⭐⭐⭐⭐☆ {product.rating}</p>
+                  <p className="description-text">{product.description}</p>
+                  <p className="price-text">${product.price.toFixed(2)}</p>
 
-                <button className="cart-btn" onClick={() => addToCart(product)}>
-                  Quick Add to Cart
-                </button>
-              </div>
-            </article>
-          ))}
-        </section>
+                  <button className="cart-btn" onClick={() => addToCart(product)}>
+                    Quick Add to Cart
+                  </button>
+                </div>
+              </article>
+            ))}
+          </section>
+        )}
 
         <section className="analytics-panel">
           <div className="analytics-header">
