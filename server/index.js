@@ -15,7 +15,10 @@ const products = [
     category: "Electronics",
     price: 99.99,
     rating: 4.5,
-    image: "https://placehold.co/200x200?text=Headphones"
+    image:
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
+    description:
+      "Comfortable wireless headphones with clear sound and noise-reducing ear cushions."
   },
   {
     id: 2,
@@ -23,7 +26,10 @@ const products = [
     category: "Fashion",
     price: 59.99,
     rating: 4.2,
-    image: "https://placehold.co/200x200?text=Shoes"
+    image:
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
+    description:
+      "Lightweight running shoes designed for everyday training, walking, and comfort."
   },
   {
     id: 3,
@@ -31,7 +37,10 @@ const products = [
     category: "Home",
     price: 79.99,
     rating: 4.0,
-    image: "https://placehold.co/200x200?text=Coffee+Maker"
+    image:
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80",
+    description:
+      "Easy-to-use coffee maker for quick brewing at home, in dorms, or in small offices."
   },
   {
     id: 4,
@@ -39,7 +48,10 @@ const products = [
     category: "Electronics",
     price: 699.99,
     rating: 4.7,
-    image: "https://placehold.co/200x200?text=Smartphone"
+    image:
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80",
+    description:
+      "Modern smartphone with a large display, fast performance, and a clean design."
   },
   {
     id: 5,
@@ -47,7 +59,10 @@ const products = [
     category: "Fashion",
     price: 89.99,
     rating: 4.3,
-    image: "https://placehold.co/200x200?text=Jacket"
+    image:
+      "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&w=600&q=80",
+    description:
+      "Stylish everyday jacket that works well for casual outfits and cooler weather."
   },
   {
     id: 6,
@@ -55,14 +70,13 @@ const products = [
     category: "Home",
     price: 49.99,
     rating: 4.1,
-    image: "https://placehold.co/200x200?text=Blender"
+    image:
+      "https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=600&q=80",
+    description:
+      "Compact blender for smoothies, shakes, and simple kitchen preparation."
   }
 ];
 
-/*
-  Generated order data for Module 5B analytics.
-  This lets us implement business analytics even without a live database connection.
-*/
 const orderItems = [
   { orderId: 1, productId: 1, quantity: 3 },
   { orderId: 2, productId: 2, quantity: 5 },
