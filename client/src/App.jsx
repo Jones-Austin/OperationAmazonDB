@@ -132,14 +132,17 @@ function App() {
         <section className="hero">
           <div className="hero-overlay">
             <h1>Shop smart with MockupAmazon</h1>
-            <p>Browse products, filter results, and simulate a real e-commerce experience.</p>
+            <p>
+              Browse products, filter results, and simulate a real e-commerce
+              experience with faster shopping and clearer product information.
+            </p>
           </div>
         </section>
 
         <section className="filters-panel">
           <div className="filters-header">
             <h2>Filter Products</h2>
-            <p>Use the options below to narrow your search.</p>
+            <p>Use category, price range, and sorting to quickly find products.</p>
           </div>
 
           <form className="filters" onSubmit={handleApplyFilters}>
@@ -189,7 +192,7 @@ function App() {
                 Apply Filters
               </button>
               <button type="button" className="clear-btn" onClick={clearFilters}>
-                Clear
+                Clear Filters
               </button>
             </div>
           </form>
@@ -211,10 +214,11 @@ function App() {
                 <h3>{product.name}</h3>
                 <p className="category-text">{product.category}</p>
                 <p className="rating-text">⭐⭐⭐⭐☆ {product.rating}</p>
+                <p className="description-text">{product.description}</p>
                 <p className="price-text">${product.price.toFixed(2)}</p>
 
                 <button className="cart-btn" onClick={() => addToCart(product)}>
-                  Add to Cart
+                  Quick Add to Cart
                 </button>
               </div>
             </article>
@@ -308,7 +312,7 @@ function App() {
                         className="remove-btn"
                         onClick={() => removeFromCart(index)}
                       >
-                        Remove
+                        Remove Item
                       </button>
                     </div>
                   ))}
