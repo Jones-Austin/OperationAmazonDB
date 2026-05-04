@@ -5,8 +5,8 @@
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: #eaeded;
-  color: #111;
+  background: var(--bg-page);
+  color: var(--text-main);
 }
 
 .page {
@@ -14,7 +14,7 @@ body {
 }
 
 .topbar {
-  background: #131921;
+  background: var(--header-bg);
   color: white;
   padding: 12px 24px;
 }
@@ -43,7 +43,7 @@ body {
 
 .brand-accent {
   font-size: 1.2rem;
-  color: #f3a847;
+  color: var(--accent-orange);
 }
 
 .header-search {
@@ -59,11 +59,13 @@ body {
   outline: none;
   font-size: 1rem;
   border-radius: 8px 0 0 8px;
+  background: white;
+  color: #111;
 }
 
 .header-search button {
   border: none;
-  background: #febd69;
+  background: var(--accent-yellow);
   color: #111;
   font-weight: 700;
   cursor: pointer;
@@ -110,7 +112,7 @@ body {
 
 .cart-count {
   background: #f08804;
-  color: #111;
+  color: white;
   min-width: 24px;
   height: 24px;
   border-radius: 999px;
@@ -121,7 +123,7 @@ body {
 }
 
 .subbar {
-  background: #232f3e;
+  background: var(--subbar-bg);
   color: white;
   padding: 10px 24px;
 }
@@ -171,10 +173,10 @@ body {
 
 .filters-panel,
 .analytics-panel {
-  background: white;
+  background: var(--bg-panel);
   border-radius: 14px;
   padding: 22px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--card-shadow);
   margin-bottom: 24px;
 }
 
@@ -187,7 +189,7 @@ body {
 .filters-header p,
 .analytics-header p {
   margin: 0 0 18px;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .filters {
@@ -212,10 +214,11 @@ body {
 .field-group select {
   width: 100%;
   padding: 12px 12px;
-  border: 1px solid #c7c7c7;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.95rem;
-  background: white;
+  background: var(--bg-panel);
+  color: var(--text-main);
 }
 
 .filter-buttons {
@@ -245,7 +248,7 @@ body {
 }
 
 .apply-btn {
-  background: #ffd814;
+  background: var(--accent-yellow);
   color: #111;
   padding: 12px 18px;
 }
@@ -270,7 +273,7 @@ body {
 
 .results-header p {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .product-grid {
@@ -281,25 +284,29 @@ body {
 }
 
 .product-card {
-  background: white;
+  background: var(--bg-panel);
   border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--card-shadow);
   display: flex;
   flex-direction: column;
-  min-height: 460px;
+  min-height: 420px;
 }
 
 .product-image-wrap {
   width: 100%;
-  height: 250px;
+  height: 220px;
   background: #f7f7f7;
   border-radius: 10px;
   display: grid;
   place-items: center;
-  padding: 10px;
+  padding: 14px;
   margin-bottom: 16px;
   overflow: hidden;
+}
+
+body.dark .product-image-wrap {
+  background: white;
 }
 
 .product-image-wrap img {
@@ -348,7 +355,7 @@ body {
 
 .cart-btn {
   margin-top: auto;
-  background: #ffd814;
+  background: var(--accent-yellow);
   color: #111;
   padding: 12px 16px;
 }
@@ -361,8 +368,8 @@ body {
 }
 
 .summary-card {
-  background: #f8f9fb;
-  border: 1px solid #e3e6ea;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 18px;
   display: flex;
@@ -372,13 +379,13 @@ body {
 
 .summary-label {
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .summary-value {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #111;
+  color: var(--text-main);
 }
 
 .analytics-table-wrap {
@@ -393,17 +400,17 @@ body {
 .analytics-table th,
 .analytics-table td {
   padding: 14px 12px;
-  border-bottom: 1px solid #e3e6ea;
+  border-bottom: 1px solid var(--border-color);
   text-align: left;
 }
 
 .analytics-table th {
-  background: #f4f6f8;
+  background: var(--bg-page);
   font-size: 0.95rem;
 }
 
 .analytics-table td {
-  background: white;
+  background: var(--bg-panel);
 }
 
 .cart-overlay {
@@ -420,7 +427,7 @@ body {
   width: 380px;
   max-width: 100%;
   height: 100vh;
-  background: white;
+  background: var(--bg-panel);
   box-shadow: -4px 0 16px rgba(0, 0, 0, 0.16);
   padding: 22px;
   z-index: 1000;
@@ -454,7 +461,7 @@ body {
 
 .empty-cart {
   margin: 0;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .cart-list {
@@ -468,14 +475,14 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 14px;
 }
 
 .cart-item-info p {
   margin: 6px 0 0;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .remove-btn {
@@ -503,8 +510,8 @@ body {
 }
 
 .chart-wrapper {
-  background: #f8f9fb;
-  border: 1px solid #e3e6ea;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 20px;
 }
@@ -512,7 +519,7 @@ body {
 .chart-wrapper h3 {
   margin: 0 0 16px;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-main);
 }
 
 @media (min-width: 900px) {

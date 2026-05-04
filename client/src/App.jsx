@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import "./App.css";
 
-function StatsPage({ analytics, summary }) {
+function StatsPage({ analytics, summary, darkMode }) {
   return (
     <section className="analytics-panel">
       <div className="analytics-header">
@@ -36,10 +36,10 @@ function StatsPage({ analytics, summary }) {
           <h3>Product Popularity (Units Sold)</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={analytics}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="product" tick={{fontSize: 12}} interval={0} angle={-25} textAnchor="end" height={80}/>
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#444" : "#ccc"} />
+              <XAxis dataKey="product" tick={{fontSize: 12, fill: darkMode ? "#ccc" : "#666"}} interval={0} angle={-25} textAnchor="end" height={80}/>
+              <YAxis tick={{fill: darkMode ? "#ccc" : "#666"}} />
+              <Tooltip contentStyle={{ backgroundColor: darkMode ? "#1e2630" : "#fff", borderColor: darkMode ? "#3a4553" : "#ccc", color: darkMode ? "#fff" : "#333" }} />
               <Legend />
               <Bar dataKey="totalSold" fill="#8884d8" name="Units Sold" />
             </BarChart>
@@ -50,10 +50,10 @@ function StatsPage({ analytics, summary }) {
           <h3>Revenue by Product ($)</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={analytics}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="product" tick={{fontSize: 12}} interval={0} angle={-25} textAnchor="end" height={80}/>
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#444" : "#ccc"} />
+              <XAxis dataKey="product" tick={{fontSize: 12, fill: darkMode ? "#ccc" : "#666"}} interval={0} angle={-25} textAnchor="end" height={80}/>
+              <YAxis tick={{fill: darkMode ? "#ccc" : "#666"}} />
+              <Tooltip contentStyle={{ backgroundColor: darkMode ? "#1e2630" : "#fff", borderColor: darkMode ? "#3a4553" : "#ccc", color: darkMode ? "#fff" : "#333" }} />
               <Legend />
               <Bar dataKey="revenue" fill="#82ca9d" name="Revenue ($)" />
             </BarChart>
@@ -76,6 +76,22 @@ function App() {
   const [sort, setSort] = useState("");
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    if (saved !== null) return JSON.parse(saved);
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  const toggleDarkMode = () => setDarkMode((prev) => !prev);
   const [cartMessage, setCartMessage] = useState("");
 
   const API_BASE = "http://localhost:3001";
@@ -180,6 +196,16 @@ function App() {
               <span className="small-text">Business</span>
               <span className="bold-text">Dashboard</span>
             </div>
+
+            <button
+              type="button"
+              className="cart-box"
+              onClick={toggleDarkMode}
+              title="Toggle Dark Mode"
+              style={{ fontSize: "1.2rem", padding: "0 8px" }}
+            >
+              {darkMode ? "☀️" : "🌙"}
+            </button>
 
             <button
               type="button"
@@ -313,7 +339,7 @@ function App() {
 
           </>
         ) : (
-          <StatsPage analytics={analytics} summary={analyticsSummary} />
+          <StatsPage analytics={analytics} summary={analyticsSummary} darkMode={darkMode} />
         )}
       </main>
 
