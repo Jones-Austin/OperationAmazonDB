@@ -23,8 +23,8 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 220px 1fr 260px;
-  gap: 20px;
+  grid-template-columns: auto 1fr auto;
+  gap: 30px;
   align-items: center;
 }
 
@@ -50,6 +50,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 120px;
   gap: 0;
+  min-width: 0;
 }
 
 .header-search input {
