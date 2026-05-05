@@ -64,8 +64,85 @@ function StatsPage({ analytics, summary, darkMode }) {
   );
 }
 
+function LoginPage({ onLogin, darkMode }) {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Mock login logic
+    onLogin({ name: isSignUp ? name : (email.split("@")[0] || "User"), email });
+  };
+
+  return (
+    <div className="login-page-wrapper">
+      <div className="login-card">
+        <h2>{isSignUp ? "Create Account" : "Sign-In"}</h2>
+        <p className="login-subtitle">
+          {isSignUp
+            ? "Join our premium shopping community today."
+            : "Welcome back! Please enter your details to continue."}
+        </p>
+        <form onSubmit={handleSubmit}>
+          {isSignUp && (
+            <div className="login-field">
+              <label>Full Name</label>
+              <input
+                type="text"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+          )}
+          <div className="login-field">
+            <label>Email Address</label>
+            <input
+              type="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="login-field">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="login-submit-btn">
+            {isSignUp ? "Create Account" : "Sign In"}
+          </button>
+        </form>
+        <p className="login-disclaimer">
+          By signing up, you agree to our Terms of Service and Privacy Policy.
+        </p>
+        <div className="login-divider">
+          <h5>{isSignUp ? "Already have an account?" : "New here?"}</h5>
+        </div>
+        <button
+          type="button"
+          className="login-toggle-btn"
+          onClick={() => setIsSignUp(!isSignUp)}
+        >
+          {isSignUp ? "Sign In instead" : "Create an account"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [currentView, setCurrentView] = useState("shop");
+  const [user, setUser] = useState(null);
   const [products, setProducts] = useState([]);
   const [analytics, setAnalytics] = useState([]);
   const [analyticsSummary, setAnalyticsSummary] = useState(null);
@@ -166,7 +243,7 @@ function App() {
     <div className="page">
       <header className="topbar">
         <div className="topbar-inner">
-          <div className="brand">
+          <div className="brand" onClick={() => setCurrentView("shop")} style={{ cursor: "pointer" }}>
             <span className="brand-main">Mockup</span>
             <span className="brand-accent">Amazon</span>
           </div>
@@ -182,9 +259,13 @@ function App() {
           </form>
 
           <div className="topbar-actions">
-            <div className="topbar-link">
-              <span className="small-text">Hello, Guest</span>
-              <span className="bold-text">Account</span>
+            <div
+              className="topbar-link"
+              onClick={() => user ? setUser(null) : setCurrentView("login")}
+              style={{ cursor: "pointer" }}
+            >
+              <span className="small-text">Hello, {user ? user.name : "Guest"}</span>
+              <span className="bold-text">{user ? "Sign Out" : "Account"}</span>
             </div>
 
             <div className="topbar-link" onClick={() => setCurrentView("shop")} style={{ cursor: "pointer" }}>
@@ -232,7 +313,15 @@ function App() {
       {cartMessage && <div className="cart-message">{cartMessage}</div>}
 
       <main className="main-content">
-        {currentView === "shop" ? (
+        {currentView === "login" ? (
+          <LoginPage
+            onLogin={(userData) => {
+              setUser(userData);
+              setCurrentView("shop");
+            }}
+            darkMode={darkMode}
+          />
+        ) : currentView === "shop" ? (
           <>
             <section className="hero">
           <div className="hero-overlay">
