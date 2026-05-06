@@ -64,82 +64,6 @@ function StatsPage({ analytics, summary, darkMode }) {
   );
 }
 
-function LoginPage({ onLogin, darkMode }) {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Mock login logic
-    onLogin({ name: isSignUp ? name : (email.split("@")[0] || "User"), email });
-  };
-
-  return (
-    <div className="login-page-wrapper">
-      <div className="login-card">
-        <h2>{isSignUp ? "Create Account" : "Sign-In"}</h2>
-        <p className="login-subtitle">
-          {isSignUp
-            ? "Join our premium shopping community today."
-            : "Welcome back! Please enter your details to continue."}
-        </p>
-        <form onSubmit={handleSubmit}>
-          {isSignUp && (
-            <div className="login-field">
-              <label>Full Name</label>
-              <input
-                type="text"
-                placeholder="Enter your name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-          )}
-          <div className="login-field">
-            <label>Email Address</label>
-            <input
-              type="email"
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="login-field">
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="login-submit-btn">
-            {isSignUp ? "Create Account" : "Sign In"}
-          </button>
-        </form>
-        <p className="login-disclaimer">
-          By signing up, you agree to our Terms of Service and Privacy Policy.
-        </p>
-        <div className="login-divider">
-          <h5>{isSignUp ? "Already have an account?" : "New here?"}</h5>
-        </div>
-        <button
-          type="button"
-          className="login-toggle-btn"
-          onClick={() => setIsSignUp(!isSignUp)}
-        >
-          {isSignUp ? "Sign In instead" : "Create an account"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function App() {
   const [currentView, setCurrentView] = useState("shop");
   const [user, setUser] = useState(null);
@@ -171,7 +95,7 @@ function App() {
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
   const [cartMessage, setCartMessage] = useState("");
 
-  const API_BASE = "http://localhost:3001";
+  const API_BASE = import.meta.env.VITE_API_BASE || "";
 
   const categories = useMemo(() => ["All", "Electronics", "Fashion", "Home"], []);
 
